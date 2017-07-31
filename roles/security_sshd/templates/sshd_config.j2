@@ -1,8 +1,8 @@
 ## Listener
-Port {{ core_sshd_config.port|default(22) }}
+Port {{ security_sshd_config.port|default(22) }}
 
-{% if core_sshd_config.listen is defined %}
-{% for address in core_sshd_config.listen %}
+{% if security_sshd_config.listen is defined %}
+{% for address in security_sshd_config.listen %}
 ListenAddress {{ address }}
 {% endfor %}
 {% endif %}
@@ -16,7 +16,7 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 SyslogFacility AUTHPRIV
 
 ## Authentication:
-PermitRootLogin {{ core_sshd_config.login_root|default('no') }}
+PermitRootLogin {{ security_sshd_config.login_root|default('no') }}
 
 LoginGraceTime 30s
 MaxAuthTries 2
@@ -32,7 +32,7 @@ RSAAuthentication no
 PubkeyAuthentication yes
 AuthorizedKeysFile	.ssh/authorized_keys
 
-PasswordAuthentication {{ core_sshd_config.login_password|default('yes') }}
+PasswordAuthentication {{ security_sshd_config.login_password|default('yes') }}
 
 ## Security
 UsePAM yes

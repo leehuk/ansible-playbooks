@@ -1,4 +1,4 @@
-core_sshd_config:
+security_sshd_config:
   port: 2223
   login_password: "yes"
   login_root: "without-password"
