@@ -1,0 +1,4 @@
+---
+- name: Set selinux configuration
+  selinux:
+    state: disabled
