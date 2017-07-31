@@ -1,1 +1,1 @@
-localhost			ansible_connection=local
+vanguard.lhsys.uk		ansible_connection=local
