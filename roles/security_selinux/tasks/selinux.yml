@@ -2,3 +2,4 @@
 - name: Set selinux configuration
   selinux:
     state: disabled
+  when: ansible_os_family == 'RedHat'
