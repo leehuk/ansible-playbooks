@@ -1,7 +1,4 @@
 ---
-- name: Debug
-  debug: var=core_sshd_config
-
 - name: Install sshd_config
   template: 
     src: sshd_config.j2
