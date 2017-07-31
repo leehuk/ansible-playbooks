@@ -1,0 +1,50 @@
+## Listener
+Port {{ core_sshd_config.port|default(22) }}
+
+{% if core_sshd_config.listen is defined %}
+{% for address in core_sshd_config.listen %}
+ListenAddress {{ address }}
+{% endfor %}
+{% endif %}
+
+## SSHD Host Keys
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+## Logging
+SyslogFacility AUTHPRIV
+
+## Authentication:
+PermitRootLogin {{ core_sshd_config.login_root|default('no') }}
+
+LoginGraceTime 30s
+MaxAuthTries 2
+MaxSessions 30
+
+ChallengeResponseAuthentication no
+GSSAPIAuthentication no
+HostbasedAuthentication no
+KerberosAuthentication no
+RhostsRSAAuthentication no
+RSAAuthentication no
+
+PubkeyAuthentication yes
+AuthorizedKeysFile	.ssh/authorized_keys
+
+PasswordAuthentication {{ core_sshd_config.login_password|default('yes') }}
+
+## Security
+UsePAM yes
+
+X11Forwarding no
+UsePrivilegeSeparation sandbox		# Default for new installations.
+
+## Environment
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+
+## Subsystems
+Subsystem	sftp	/usr/libexec/openssh/sftp-server

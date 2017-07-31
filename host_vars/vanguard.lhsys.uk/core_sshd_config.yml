@@ -1,0 +1,7 @@
+core_sshd_config:
+  port: 2223
+  login_password: "yes"
+  login_root: "without-password"
+  listen:
+    - 149.202.72.112
+    - 2001:41d0:d:3170::ff

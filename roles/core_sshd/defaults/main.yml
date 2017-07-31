@@ -1,0 +1,2 @@
+core_sshd_config:
+  default: yes
