@@ -1,0 +1,11 @@
+core_network:
+  devices:
+    - device: 'eno1'
+      ip: '149.202.72.112'       
+      subnet: '24'
+      gateway: '149.202.72.254'
+      ip6: '2001:41d0:d:3170::ff'
+      subnet6: '64'
+      gateway6: '2001:41d0:d:31ff:ff:ff:ff:ff'
+    - device: 'eno2'
+      disabled: true

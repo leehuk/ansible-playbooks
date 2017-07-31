@@ -1,0 +1,34 @@
+- name: Install bridge configuration
+  template:
+    src=rhel/bridge.j2
+    dest=/etc/sysconfig/network-scripts/ifcfg-{{ item.device }}
+  with_items:
+    - "{{ core_network.bridges }}"
+  register: network_bridges
+  when: core_network.bridges is defined
+
+- name: Install device configuration
+  template:
+    src=rhel/device.j2
+    dest=/etc/sysconfig/network-scripts/ifcfg-{{ item.device }}
+  with_items:
+    - "{{ core_network.devices }}"
+  register: network_devices
+  when: core_network.devices is defined
+
+- name: Determining managed network configuration files
+  set_fact:
+    network_files_managed: "{{ network_bridges.results|default([])|getdest + network_devices.results|default([])|getdest + ['/etc/sysconfig/network-scripts/ifcfg-lo'] }}"
+
+- name: Determining existing network configuration files
+  shell: find /etc/sysconfig/network-scripts -type f -name ifcfg\*
+  changed_when: false
+  register: network_files_all
+
+- name: Removing unmanaged network configuration files
+  file:
+    path="{{ item }}"
+    state=absent
+  with_items:
+    - "{{ network_files_all.stdout_lines }}"
+  when: item not in network_files_managed
