@@ -1,0 +1,16 @@
+---
+- name: Create systemd sshd folder
+  file:
+    path: /etc/systemd/system/sshd.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create systemd sshd override
+  copy:
+    src: systemd_sshd_override.conf
+    dest: /etc/systemd/system/sshd.service.d/override.conf
+    owner: root
+    group: root
+    mode: 0644
