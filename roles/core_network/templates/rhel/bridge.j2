@@ -1,6 +1,31 @@
 DEVICE={{ item.device }}
-TYPE=bridge
+TYPE=Bridge
 ONBOOT=yes
 BOOTPROTO=none
 NM_CONTROLLED=no
 DELAY=0
+{% if item.ip is defined %}
+BOOTPROTO=none
+IPADDR={{ item.ip }}
+PREFIX={{ item.subnet }}
+{% if item.gateway %}
+GATEWAY={{ item.gateway }}
+DEFROUTE=yes
+{% endif %}
+{% endif %}
+{% if item.dhcp is defined %}
+BOOTPROTO=dhcp
+{% endif %}
+{% if item.ip6 is defined %}
+IPV6INIT=yes
+IPV6_AUTOCONF=no
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+IPV6ADDR={{ item.ip6 }}/{{ item.subnet6 }}
+IPV6_DEFAULTGW={{ item.gateway6 }}
+IPV6_PRIVACY=no
+{% else %}
+IPV6INIT=no
+{% endif %}
+
