@@ -5,6 +5,9 @@ TYPE={{ item.type|default('Ethernet') }}
 ONBOOT=no
 BOOTPROTO=none
 {% else %}
+{% if item.bridge is defined %}
+BRIDGE={{ item.bridge }}
+{% endif %}
 ONBOOT=yes
 IPV4_FAILURE_FATAL=no
 {% if item.ip is defined %}
@@ -15,7 +18,8 @@ PREFIX={{ item.subnet }}
 GATEWAY={{ item.gateway }}
 DEFROUTE=yes
 {% endif %}
-{% else %}
+{% endif %}
+{% if item.dhcp is defined %}
 BOOTPROTO=dhcp
 {% endif %}
 {% if item.ip6 is defined %}
