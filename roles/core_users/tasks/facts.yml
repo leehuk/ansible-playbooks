@@ -1,0 +1,9 @@
+- name: Loading user account facts
+  shell: "perl -e 'use strict; use JSON; my $users = {}; while(my @user = getpwent()) { $users->{$user[0]} = { qq[name] => $user[0], qq[uid] => $user[2], qq[group] => scalar(getgrgid($user[3])), qq[gid] => $user[3], qq[home] => $user[7] }; } print to_json($users);'"
+  register: user_accounts_raw
+
+- name: Setting user account facts
+  set_fact:
+    user_accounts: "{{ user_accounts_raw.stdout }}"
+
+

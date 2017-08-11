@@ -1,0 +1,6 @@
+core_users:
+  - user: 'root'
+    bash_profile: true
+  - user: 'leeh'
+    bash_profile: true
+    ssh_authorized_keys: "leeh-external"
