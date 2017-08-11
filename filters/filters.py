@@ -2,15 +2,29 @@ import json
 
 class FilterModule(object):
     def filters(self):
-        return {'getdest': getdest}
+        return {
+            'getattrsa': getattrsa
+        }
 
-def getdest(data):
+def getattrsa(data, attrs):
     results = []
 
     for entry in data:
-        if 'path' in entry:
-            results.append(entry['path'])
-        if 'dest' in entry:
-            results.append(entry['dest'])
+        if len(attrs) == 1:
+            attr = attrs[0]
+            if attr in entry:
+                results.append(entry[attr])
+        else:
+            result = {}
+            missing = False
+
+            for attr in attrs:
+                if attr in entry:
+                    result[attr] = entry[attr]
+                else:
+                    missing = True
+
+            if missing == False:
+                results.append(result)
 
     return results
