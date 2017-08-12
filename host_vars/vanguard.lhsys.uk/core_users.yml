@@ -1,6 +1,6 @@
 core_users:
   - user: 'root'
-    bash_profile: true
+    dotfiles: true
   - user: 'leeh'
-    bash_profile: true
+    dotfiles: true
     ssh_authorized_keys: "leeh-external"

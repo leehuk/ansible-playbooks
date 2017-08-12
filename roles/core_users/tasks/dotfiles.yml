@@ -1,0 +1,38 @@
+- name: Setting dotfiles (bashrc)
+  copy:
+    src: dotfiles/bashrc
+    dest: "{{ user_accounts[item.user]['home'] }}/.bashrc"
+    owner: "{{ item.user }}"
+    group: "{{ user_accounts[item.user]['group'] }}"
+    mode: 0600
+  with_items:
+    - "{{ core_users|getkeys(['user','dotfiles']) }}"
+
+- name: Setting dotfiles (bash_profile)
+  copy:
+    src: dotfiles/bash_profile
+    dest: "{{ user_accounts[item.user]['home'] }}/.bash_profile"
+    owner: "{{ item.user }}"
+    group: "{{ user_accounts[item.user]['group'] }}"
+    mode: 0600
+  with_items:
+    - "{{ core_users|getkeys(['user','dotfiles']) }}"
+
+- name: Setting dotfiles (vimrc)
+  copy:
+    src: dotfiles/vimrc
+    dest: "{{ user_accounts[item.user]['home'] }}/.vimrc"
+    owner: "{{ item.user }}"
+    group: "{{ user_accounts[item.user]['group'] }}"
+    mode: 0600
+  with_items:
+    - "{{ core_users|getkeys(['user','dotfiles']) }}"
+
+- name: Setting dotfiles (.vim)
+  unarchive:
+    src: dotfiles/vim.tgz
+    dest: "{{ user_accounts[item.user]['home'] }}"
+    owner: "{{ item.user }}"
+    group: "{{ user_accounts[item.user]['group'] }}"
+  with_items:
+    - "{{ core_users|getkeys(['user','dotfiles']) }}"
