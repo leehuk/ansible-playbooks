@@ -8,7 +8,7 @@ DELAY=0
 BOOTPROTO=none
 IPADDR={{ item.ip }}
 PREFIX={{ item.subnet }}
-{% if item.gateway %}
+{% if item.gateway is defined %}
 GATEWAY={{ item.gateway }}
 DEFROUTE=yes
 {% endif %}
@@ -23,7 +23,9 @@ IPV6_DEFROUTE=yes
 IPV6_FAILURE_FATAL=no
 IPV6_ADDR_GEN_MODE=stable-privacy
 IPV6ADDR={{ item.ip6 }}/{{ item.subnet6 }}
+{% if item.gateway6 is defined %}
 IPV6_DEFAULTGW={{ item.gateway6 }}
+{% endif %}
 IPV6_PRIVACY=no
 {% else %}
 IPV6INIT=no
