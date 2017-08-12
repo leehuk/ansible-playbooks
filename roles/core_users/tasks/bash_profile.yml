@@ -6,7 +6,7 @@
     group: "{{ user_accounts[item.user]['group'] }}"
     mode: 0600
   with_items:
-    - "{{ core_users|getattrsa(['user','bash_profile']) }}"
+    - "{{ core_users|getkeys(['user','bash_profile']) }}"
 
 - name: Setting bash profile (bash_profile)
   copy:
@@ -16,4 +16,4 @@
     group: "{{ user_accounts[item.user]['group'] }}"
     mode: 0600
   with_items:
-    - "{{ core_users|getattrsa(['user','bash_profile']) }}"
+    - "{{ core_users|getkeys(['user','bash_profile']) }}"

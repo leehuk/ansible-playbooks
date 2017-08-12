@@ -5,4 +5,4 @@
     key: "{{ lookup('file', 'ssh_authorized_keys/{{ item.ssh_authorized_keys }}') }}"
     exclusive: True
   with_items:
-    - "{{ core_users|getattrsa(['user','ssh_authorized_keys']) }}"
+    - "{{ core_users|getkeys(['user','ssh_authorized_keys']) }}"

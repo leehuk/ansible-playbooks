@@ -1,7 +1,7 @@
 - name: Creating users
   user:
-    name: "{{ item }}"
+    name: "{{ item.user }}"
     shell: "/bin/bash"
     state: present
   with_items:
-    - "{{ core_users|getattrsa(['user']) }}"
+    - "{{ core_users|getkeys(['user']) }}"
