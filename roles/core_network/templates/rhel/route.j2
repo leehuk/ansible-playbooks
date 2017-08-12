@@ -1,0 +1,3 @@
+{% for block in item.routes %}
+{{ block.route }} {% if block.via is defined %}via {{ block.via }}{% endif %} dev {{ item.device }}
+{% endfor %}

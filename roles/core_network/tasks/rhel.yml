@@ -22,12 +22,30 @@
   register: network_devices
   when: core_network.devices is defined
 
+- name: Install ipv4 route configuration
+  template:
+    src: rhel/route.j2
+    dest: /etc/sysconfig/network-scripts/route-{{ item.device }}
+  with_items:
+    - "{{ core_network.routes4 }}"
+  register: network_routes4
+  when: core_network.routes4 is defined
+
+- name: Install ipv6 route configuration
+  template:
+    src: rhel/route.j2
+    dest: /etc/sysconfig/network-scripts/route6-{{ item.device }}
+  with_items:
+    - "{{ core_network.routes6 }}"
+  register: network_routes6
+  when: core_network.routes6 is defined
+
 - name: Determining managed network configuration files
   set_fact:
-    network_files_managed: "{{ network_bridges.results|default([])|getkeys_or(['path','dest']) + network_devices.results|default([])|getkeys_or(['path','dest']) + ['/etc/sysconfig/network-scripts/ifcfg-lo'] }}"
+    network_files_managed: "{{ network_bridges.results|default([])|getkeys_or(['path','dest']) + network_devices.results|default([])|getkeys_or(['path','dest']) + network_routes4.results|default([])|getkeys_or(['path','dest']) + network_routes6.results|default([])|getkeys_or(['path','dest']) + ['/etc/sysconfig/network-scripts/ifcfg-lo'] }}"
 
 - name: Determining existing network configuration files
-  shell: find /etc/sysconfig/network-scripts -type f -name ifcfg\*
+  shell: find /etc/sysconfig/network-scripts -type f -name ifcfg\* -o -name route\*
   changed_when: false
   register: network_files_all
 

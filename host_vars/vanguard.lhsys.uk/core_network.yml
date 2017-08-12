@@ -6,9 +6,14 @@ core_network:
       gateway: '149.202.72.254'
       ip6: '2001:41d0:d:3170::ff'
       subnet6: '64'
-      gateway6: '2001:41d0:d:31ff:ff:ff:ff:ff'
   devices:
     - device: 'eno1'
       bridge: 'br0'
     - device: 'eno2'
       disabled: true
+  routes6:
+    - device: 'br0'
+      routes:
+        - route: '2001:41d0:d:31ff::/64'
+        - route: 'default'
+          via: '2001:41d0:d:31ff:ff:ff:ff:ff'
