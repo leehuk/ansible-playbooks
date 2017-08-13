@@ -1,6 +1,6 @@
 core_network:
   bridges:
-    - device: 'br0'
+    - device: 'br_ext'
       ipmulti:
         - ip: '149.202.72.112'       
           subnet: '24'
@@ -9,11 +9,19 @@ core_network:
       gateway: '149.202.72.254'
       ip6: '2001:41d0:d:3170::ff'
       subnet6: '64'
+    - device: 'br_int'
+      ip: '10.10.0.254'
+      subnet: '24'
   devices:
     - device: 'eno1'
-      bridge: 'br0'
+      bridge: 'br_ext'
     - device: 'eno2'
       disabled: true
+    - device: 'dummy0'
+      bridge: 'br_int'
+      dummy: true
+      macaddr: 'fe:fe:fe:fe:fe:fe'
+      arp: true
   routes6:
     - device: 'br0'
       routes:
