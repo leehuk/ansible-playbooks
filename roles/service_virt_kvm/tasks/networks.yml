@@ -1,0 +1,4 @@
+- name: Disable default libvirt nat network
+  virt_net:
+    name: default
+    state: absent

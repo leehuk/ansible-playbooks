@@ -1,0 +1,13 @@
+- name: Install kvm packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - qemu-kvm
+    - libvirt
+    - virt-install
+
+- name: Install python-lxml ansible::virt_net dependency
+  yum:
+    name: python-lxml
+    state: present

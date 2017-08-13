@@ -1,0 +1,14 @@
+- name: Enable libvirtd
+  systemd:
+    name: libvirtd
+    enabled: yes
+    state: started
+
+- name: Disable rpcbind socket activation
+  systemd:
+    name: rpcbind.socket
+    state: stopped
+    enabled: no
+    masked: no
+
+
