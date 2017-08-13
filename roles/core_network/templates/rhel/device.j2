@@ -1,10 +1,16 @@
 NAME={{ item.device }}
 DEVICE={{ item.device }}
 TYPE={{ item.type|default('Ethernet') }}
-{% if item.disabled is defined %}
+{% if item.disabled is defined and item.disabled %}
 ONBOOT=no
 BOOTPROTO=none
 {% else %}
+{% if item.macaddr is defined %}
+MACADDR={{ item.macaddr }}
+{% endif %}
+{% if item.arp is defined %}
+ARP={{ 'yes' if item.arp else 'no' }}
+{% endif %}
 {% if item.bridge is defined %}
 BRIDGE={{ item.bridge }}
 {% endif %}
@@ -24,7 +30,7 @@ PREFIX{{ count }}={{ itemip.subnet }}
 {% set count = count + 1 %}
 {% endfor %}
 {% endif %}
-{% if item.gateway %}
+{% if item.gateway is defined %}
 GATEWAY={{ item.gateway }}
 DEFROUTE=yes
 {% endif %}

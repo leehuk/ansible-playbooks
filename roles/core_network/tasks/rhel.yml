@@ -22,6 +22,25 @@
   register: network_devices
   when: core_network.devices is defined
 
+- name: Determine dummy interface status
+  set_fact:
+    network_dummy_required={{ core_network.devices|default([])|getkeys('dummy') }}
+
+- name: Enable dummy interface module
+  copy:
+    src: rhel/module-dummy.conf
+    dest: /etc/modules-load.d/dummy.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: network_dummy_required
+
+- name: Disable dummy interface module
+  file:
+    path: /etc/modules-load.d/dummy.conf
+    state: absent
+  when: not network_dummy_required
+
 - name: Install ipv4 route configuration
   template:
     src: rhel/route.j2
