@@ -4,10 +4,20 @@ ONBOOT=yes
 BOOTPROTO=none
 NM_CONTROLLED=no
 DELAY=0
-{% if item.ip is defined %}
+{% if item.ip is defined or item.ipmulti is defined %}
 BOOTPROTO=none
+{% if item.ip is defined %}
 IPADDR={{ item.ip }}
 PREFIX={{ item.subnet }}
+{% endif %}
+{% if item.ipmulti is defined %}
+{% set count = 0 %}
+{% for itemip in item.ipmulti %}
+IPADDR{{ count }}={{ itemip.ip }}
+PREFIX{{ count }}={{ itemip.subnet }}
+{% set count = count + 1 %}
+{% endfor %}
+{% endif %}
 {% if item.gateway is defined %}
 GATEWAY={{ item.gateway }}
 DEFROUTE=yes
