@@ -1,6 +1,0 @@
-core_users:
-  - user: 'root'
-    dotfiles: true
-  - user: 'leeh'
-    dotfiles: true
-    ssh_authorized_keys: "leeh-external"
