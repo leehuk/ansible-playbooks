@@ -1,4 +1,4 @@
 ---
-- include: rhel.yml
+- include: redhat.yml
   static: yes
   when: ansible_os_family == "RedHat" and (core_network.bridges is defined or core_network.devices is defined)

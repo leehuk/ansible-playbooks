@@ -6,7 +6,7 @@
 
 - name: Install bridge configuration
   template:
-    src: rhel/bridge.j2
+    src: redhat/bridge.j2
     dest: /etc/sysconfig/network-scripts/ifcfg-{{ item.device }}
   with_items:
     - "{{ core_network.bridges }}"
@@ -15,7 +15,7 @@
 
 - name: Install device configuration
   template:
-    src: rhel/device.j2
+    src: redhat/device.j2
     dest: /etc/sysconfig/network-scripts/ifcfg-{{ item.device }}
   with_items:
     - "{{ core_network.devices }}"
@@ -28,7 +28,7 @@
 
 - name: Enable dummy interface module
   copy:
-    src: rhel/module-dummy.conf
+    src: redhat/module-dummy.conf
     dest: /etc/modules-load.d/dummy.conf
     owner: root
     group: root
@@ -43,7 +43,7 @@
 
 - name: Install ipv4 route configuration
   template:
-    src: rhel/route.j2
+    src: redhat/route.j2
     dest: /etc/sysconfig/network-scripts/route-{{ item.device }}
   with_items:
     - "{{ core_network.routes4 }}"
@@ -52,7 +52,7 @@
 
 - name: Install ipv6 route configuration
   template:
-    src: rhel/route.j2
+    src: redhat/route.j2
     dest: /etc/sysconfig/network-scripts/route6-{{ item.device }}
   with_items:
     - "{{ core_network.routes6 }}"
