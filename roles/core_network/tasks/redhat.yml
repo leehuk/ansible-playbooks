@@ -1,18 +1,3 @@
-- name: Install bridge-utils
-  yum:
-    name: bridge-utils
-    state: present
-  when: core_network.bridges is defined
-
-- name: Install bridge configuration
-  template:
-    src: redhat/bridge.j2
-    dest: /etc/sysconfig/network-scripts/ifcfg-{{ item.device }}
-  with_items:
-    - "{{ core_network.bridges }}"
-  register: network_bridges
-  when: core_network.bridges is defined
-
 - name: Install device configuration
   template:
     src: redhat/device.j2
@@ -21,25 +6,6 @@
     - "{{ core_network.devices }}"
   register: network_devices
   when: core_network.devices is defined
-
-- name: Determine dummy interface status
-  set_fact:
-    network_dummy_required={{ core_network.devices|default([])|getkeys('dummy') }}
-
-- name: Enable dummy interface module
-  copy:
-    src: redhat/module-dummy.conf
-    dest: /etc/modules-load.d/dummy.conf
-    owner: root
-    group: root
-    mode: 0644
-  when: network_dummy_required
-
-- name: Disable dummy interface module
-  file:
-    path: /etc/modules-load.d/dummy.conf
-    state: absent
-  when: not network_dummy_required
 
 - name: Install ipv4 route configuration
   template:
@@ -59,19 +25,19 @@
   register: network_routes6
   when: core_network.routes6 is defined
 
-- name: Determining managed network configuration files
-  set_fact:
-    network_files_managed: "{{ network_bridges.results|default([])|getkeys_or(['path','dest']) + network_devices.results|default([])|getkeys_or(['path','dest']) + network_routes4.results|default([])|getkeys_or(['path','dest']) + network_routes6.results|default([])|getkeys_or(['path','dest']) + ['/etc/sysconfig/network-scripts/ifcfg-lo'] }}"
-
-- name: Determining existing network configuration files
-  shell: find /etc/sysconfig/network-scripts -type f -name ifcfg\* -o -name route\*
-  changed_when: false
-  register: network_files_all
-
-- name: Removing unmanaged network configuration files
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ network_files_all.stdout_lines }}"
-  when: item not in network_files_managed
+#- name: Determining managed network configuration files
+#  set_fact:
+#    network_files_managed: "{{ network_bridges.results|default([])|getkeys_or(['path','dest']) + network_devices.results|default([])|getkeys_or(['path','dest']) + network_routes4.results|default([])|getkeys_or(['path','dest']) + network_routes6.results|default([])|getkeys_or(['path','dest']) + ['/etc/sysconfig/network-scripts/ifcfg-lo'] }}"
+#
+#- name: Determining existing network configuration files
+#  shell: find /etc/sysconfig/network-scripts -type f -name ifcfg\* -o -name route\*
+#  changed_when: false
+#  register: network_files_all
+#
+#- name: Removing unmanaged network configuration files
+#  file:
+#    path: "{{ item }}"
+#    state: absent
+#  with_items:
+#    - "{{ network_files_all.stdout_lines }}"
+#  when: item not in network_files_managed
