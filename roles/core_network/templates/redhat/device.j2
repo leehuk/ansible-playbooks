@@ -11,9 +11,6 @@ MACADDR={{ item.macaddr }}
 {% if item.arp is defined %}
 ARP={{ 'yes' if item.arp else 'no' }}
 {% endif %}
-{% if item.bridge is defined %}
-BRIDGE={{ item.bridge }}
-{% endif %}
 ONBOOT=yes
 IPV4_FAILURE_FATAL=no
 {% if item.ip is defined or item.ipmulti is defined %}
