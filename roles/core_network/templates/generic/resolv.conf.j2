@@ -1,0 +1,8 @@
+{% if core_network.dns.servers is defined %}
+{% for server in core_network.dns.servers %}
+nameserver {{ server }}
+{% endfor %}
+{% endif %}
+{% if core_network.dns.domain is defined %}
+search {{ core_network.dns.domain }}
+{% endif %}
