@@ -1,7 +1,36 @@
+- name: Creating groups
+  group:
+    name: "{{ user.group }}"
+    gid: "{{ user.gid }}"
+  loop: "{{ core_users }}"
+  loop_control:
+    loop_var: user
+  when: user.group is defined
+
 - name: Creating users
   user:
-    name: "{{ item.user }}"
-    shell: "/bin/bash"
+    name: "{{ user.name }}"
+    group: "{{ user.group|default(omit) }}"
+    uid: "{{ user.uid|default(omit) }}"
+    shell: "{{ user.shell|default('/bin/bash') }}"
+    state: "{{ user.state|default('present') }}"
+  loop: "{{ core_users }}"
+  loop_control:
+    loop_var: user
+
+- include_tasks: dotfiles.yml
+  loop: "{{ core_users }}"
+  loop_control:
+    loop_var: user
+  when: user.dotfiles is defined and user.dotfiles
+
+- name: Setting ssh authorized_keys
+  authorized_key:
+    user: "{{ user.name }}"
     state: present
-  with_items:
-    - "{{ core_users|getkeys(['user']) }}"
+    key: "{{ lookup('file', 'ssh_authorized_keys/{{ item.ssh_authorized_keys }}') }}"
+    exclusive: True
+  loop: "{{ core_users }}"
+  loop_control:
+    loop_var: user
+  when: user.ssh_authorized_keys is defined

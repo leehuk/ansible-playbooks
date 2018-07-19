@@ -1,5 +1,4 @@
 ---
-- include: facts.yml
-- include: users.yml
-- include: dotfiles.yml
-- include: ssh_authorized_keys.yml
+- import_tasks: facts.yml
+- import_tasks: users.yml
+  when: core_users is defined

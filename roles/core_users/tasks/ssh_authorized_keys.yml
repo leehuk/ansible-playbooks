@@ -1,8 +1,0 @@
-- name: Setting ssh authorized_keys
-  authorized_key:
-    user: "{{ item.user }}"
-    state: present
-    key: "{{ lookup('file', 'ssh_authorized_keys/{{ item.ssh_authorized_keys }}') }}"
-    exclusive: True
-  with_items:
-    - "{{ core_users|getkeys(['user','ssh_authorized_keys']) }}"
