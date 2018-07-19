@@ -1,0 +1,3 @@
+{% for command in sudo.command %}
+{{ sudo.user }} ALL=({{ sudo.target }}) {{ sudo.flags|default('')|join(' ') }} {{ command }}
+{% endfor %}

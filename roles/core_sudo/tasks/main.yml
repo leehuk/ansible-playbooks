@@ -1,0 +1,12 @@
+---
+- name: Apply sudo configuration
+  template:
+    src: sudo.j2
+    dest: "/etc/sudoers.d/{{ sudo.file }}"
+    owner: root
+    group: root
+    mode: 0600
+  loop: "{{ core_sudo }}"
+  loop_control:
+    loop_var: sudo
+  when: core_sudo is defined
