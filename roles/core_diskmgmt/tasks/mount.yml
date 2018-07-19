@@ -2,14 +2,25 @@
   file:
     path: "{{ mount.path }}"
     state: directory
-
-- name: Mount filesystem
-  mount:
-    src: "{{ mount.device }}"
-    path: "{{ mount.path }}"
-    fstype: "{{ mount.fstype }}"
-    state: "{{ mount.state }}"
   loop: "{{ core_diskmgmt.mount }}"
   loop_control:
     loop_var: mount
   when: core_diskmgmt.mount is defined
+
+- name: Apply filesystem mount
+  mount:
+    src: "{{ mount.device }}"
+    path: "{{ mount.path }}"
+    fstype: "{{ mount.fstype }}"
+    opts: "{{ mount.opts|default(omit) }}"
+    state: "{{ mount.state|default('mounted') }}"
+  loop: "{{ core_diskmgmt.mount }}"
+  loop_control:
+    loop_var: mount
+  when: core_diskmgmt.mount is defined
+
+- include_tasks: bindmount.yml
+  loop: "{{ core_diskmgmt.bindmount }}"
+  loop_control:
+    loop_var: mount
+  when: core_diskmgmt.bindmount is defined
