@@ -1,0 +1,15 @@
+---
+- include_tasks: disk.yml
+  loop: "{{ core_diskmgmt.disks }}"
+  loop_control:
+    loop_var: disk
+  when: core_diskmgmt.disks is defined
+
+- include_tasks: lvm.yml
+  when: core_diskmgmt.lvm is defined
+
+- include_tasks: fs.yml
+  when: core_diskmgmt.fs is defined
+
+- include_tasks: mount.yml
+  when: core_diskmgmt.mount is defined

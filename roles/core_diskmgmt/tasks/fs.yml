@@ -1,0 +1,9 @@
+- name: Create filesystem
+  filesystem:
+    device: "{{ fs.device }}"
+    fstype: "{{ fs.fstype }}"
+    opts: "{{ fs.opts|default(omit) }}"
+  loop: "{{ core_diskmgmt.fs }}"
+  loop_control:
+    loop_var: fs
+  when: core_diskmgmt.fs is defined

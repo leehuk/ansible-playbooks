@@ -1,0 +1,18 @@
+- name: Create LVM Volume Group
+  lvg:
+    vg: "{{ vg.name }}"
+    pvs: "{{ vg.pv|join(',') }}"
+  loop: "{{ core_diskmgmt.lvm.vg }}"
+  loop_control:
+    loop_var: vg
+  when: core_diskmgmt.lvm.vg is defined
+
+- name: Create LVM Logical Volume
+  lvol:
+    lv: "{{ lv.name }}"
+    vg: "{{ lv.vg }}"
+    size: "{{ lv.size }}"
+  loop: "{{ core_diskmgmt.lvm.lv }}"
+  loop_control:
+    loop_var: lv
+  when: core_diskmgmt.lvm.lv is defined

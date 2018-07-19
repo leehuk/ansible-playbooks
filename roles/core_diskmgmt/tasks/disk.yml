@@ -1,0 +1,30 @@
+- name: Lookup disk information
+  parted:
+    device: "{{ disk.disk }}"
+  register: disk_info
+
+- name: Validate disk label creation
+  fail:
+    msg: |
+      "{{ disk.disk }} partition table must be destroyed to apply new label type."
+      "Run with -e diskmgmt_destroy=x to proceed."
+  when: disk_info.disk.table != disk.label and diskmgmt_destroy is not defined
+
+# These tasks arent ideal as its difficult to add validation to ensure partitions
+# wont be overwritten.  There are a number of complications with the way partitions
+# are aligned to boundaries and the various supported sizing formats that make
+# those checks challenging.
+
+- name: Create gpt partition 
+  parted:
+    device: "{{ disk.disk }}"
+    name: "{{ partition.name }}"
+    number: "{{ partition.number }}"
+    part_start: "{{ partition.start }}"
+    part_end: "{{ partition.end }}"
+    label: gpt
+    state: present
+  loop: "{{ disk.partitions }}"
+  loop_control:
+    loop_var: partition
+  when: disk.label == 'gpt' and disk.partitions is defined

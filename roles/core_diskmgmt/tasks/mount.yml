@@ -1,0 +1,10 @@
+- name: Mount filesystem
+  mount:
+    src: "{{ mount.device }}"
+    path: "{{ mount.path }}"
+    fstype: "{{ mount.fstype }}"
+    state: "{{ mount.state }}"
+  loop: "{{ core_diskmgmt.mount }}"
+  loop_control:
+    loop_var: mount
+  when: core_diskmgmt.mount is defined
