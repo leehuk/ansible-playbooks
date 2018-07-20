@@ -1,3 +1,17 @@
+- name: Disable NetworkManager
+  service:
+    name: NetworkManager
+    enabled: no
+    state: stopped
+  when: core_network.devices is defined
+
+- name: Disable NetworkManager-wait-online
+  service:
+    name: NetworkManager-wait-online
+    enabled: no
+    state: stopped
+  when: core_network.devices is defined
+
 - name: Install device configuration
   template:
     src: redhat/device.j2

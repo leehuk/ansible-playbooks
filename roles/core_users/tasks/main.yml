@@ -1,4 +1,3 @@
 ---
-- import_tasks: facts.yml
 - import_tasks: users.yml
   when: core_users is defined

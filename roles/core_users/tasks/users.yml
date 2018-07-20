@@ -18,6 +18,8 @@
   loop_control:
     loop_var: user
 
+- include_tasks: facts.yml
+
 - include_tasks: dotfiles.yml
   loop: "{{ core_users }}"
   loop_control:
