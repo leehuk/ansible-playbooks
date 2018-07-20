@@ -1,0 +1,13 @@
+- name: Check bind mount source {{ mount.src }}
+  stat:
+    path: "{{ mount.src }}"
+  register: st
+
+- name: Apply bind mount
+  mount:
+    src: "{{ mount.src }}"
+    path: "{{ mount.dst }}"
+    fstype: none
+    opts: bind
+    state: "{{ mount.state|default('mounted') }}"
+  when: st.stat.exists
