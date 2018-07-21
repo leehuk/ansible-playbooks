@@ -1,0 +1,18 @@
+- include_tasks: repo.yml
+  loop: "{{ core_repos.repos }}"
+  loop_control:
+    loop_var: repo
+  when: core_repos is defined and core_repos.repos is defined
+
+- name: Listing all repos
+  shell: find /etc/yum.repos.d -type f
+  changed_when: false
+  register: managed_repos_all
+  when: core_repos is defined and core_repos.prune_repos is defined and core_repos.prune_repos
+
+- name: Removing unmanaged repos
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ managed_repos_all.stdout_lines }}"
+  when: item not in managed_repos

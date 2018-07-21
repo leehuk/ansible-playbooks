@@ -1,0 +1,11 @@
+[{{ repo.name }}]
+name={{ repo.name }}
+baseurl={{ repo.url }}
+enabled={{ repo.enabled|default('1') }}
+metadata_expire={{ repo.expiry|default('1d') }}
+repo_gpgcheck={{ repo.repo_gpgcheck|default('0') }}
+type=rpm
+gpgcheck={{ repo.gpgcheck|default('1') }}
+{% if repo.gpgfile is defined %}
+gpgfile=file://{{ repo.gpgfile }}
+{% endif %}

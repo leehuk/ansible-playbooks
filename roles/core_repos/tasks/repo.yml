@@ -1,0 +1,40 @@
+- name: Checking local gpg key
+  stat:
+    path: "{{ role_path }}/files/gpg/{{ repo.gpgfile }}"
+  delegate_to: localhost
+  register: stloc
+
+- name: Checking remote gpg key
+  stat:
+    path: /etc/pki/rpm-gpg/{{ repo.gpgfile }}
+  register: strem
+
+- name: Validating gpg key
+  fail:
+    msg: |
+      "{{ repo.gpgfile }} needs to be installed but does not exist within {{ role_path }}/files/gpg/"
+  when: not stloc.stat.exists and not strem.stat.exists
+
+- name: Installing gpg key file
+  copy:
+    src: gpg/{{ repo.gpgfile }}
+    dest: /etc/pki/rpm-gpg/{{ repo.gpgfile }}
+    owner: root
+    group: root
+    mode: 0644
+  when: stloc.stat.exists
+
+- name: Adding gpg key file to database
+  rpm_key:
+    key: /etc/pki/rpm-gpg/{{ repo.gpgfile }}
+    state: present
+
+- name: Setup repo
+  template:
+    src: repo.j2
+    dest: "/etc/yum.repos.d/{{ repo.file }}.repo"
+  register: managed_repos_cur
+
+- name: Updating repo configuration
+  set_fact:
+    managed_repos: "{{ managed_repos|default([])|append(managed_repos_cur.path) }}"
