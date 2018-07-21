@@ -25,14 +25,3 @@
   loop_control:
     loop_var: user
   when: user.dotfiles is defined and user.dotfiles
-
-- name: Setting ssh authorized_keys
-  authorized_key:
-    user: "{{ user.name }}"
-    state: present
-    key: "{{ lookup('file', 'ssh_authorized_keys/{{ item.ssh_authorized_keys }}') }}"
-    exclusive: True
-  loop: "{{ core_users }}"
-  loop_control:
-    loop_var: user
-  when: user.ssh_authorized_keys is defined

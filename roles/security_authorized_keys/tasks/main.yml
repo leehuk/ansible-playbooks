@@ -1,0 +1,8 @@
+- name: Setting ssh authorized_keys
+  authorized_key:
+    user: "{{ item.user }}"
+    state: present
+    key: "{{ lookup('file', 'keys/{{ item.file }}') }}"
+    exclusive: True
+  loop: "{{ security_authorized_keys }}"
+  when: security_authorized_keys is defined
