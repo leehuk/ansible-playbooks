@@ -37,4 +37,4 @@
 
 - name: Updating repo configuration
   set_fact:
-    managed_repos: "{{ managed_repos|default([])|append(managed_repos_cur.path) }}"
+    managed_repos: "{{ managed_repos|append(managed_repos_cur.path) }}"

@@ -1,3 +1,7 @@
+- name: Creating repo tracking
+  set_fact:
+    managed_repos: []
+
 - include_tasks: repo.yml
   loop: "{{ core_repos.repos }}"
   loop_control:
