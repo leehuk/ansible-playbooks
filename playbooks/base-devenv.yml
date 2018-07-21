@@ -1,0 +1,4 @@
+- hosts: all
+  roles:
+    - service_time_chrony
+    - service_docker
