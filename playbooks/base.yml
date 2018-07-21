@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - core_network
+    - core_users
+    - core_sudo
+    - core_diskmgmt
+    - security_authorized_keys
+    - security_sshd
