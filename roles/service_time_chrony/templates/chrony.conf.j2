@@ -1,0 +1,18 @@
+{% if service_time_chrony is defined and service_time_chrony.config is defined %}
+{% if service_time_chrony.config == 'hyperv' %}
+refclock PHC /dev/ptp0 trust poll 2
+makestep 1 -1
+maxdistance 16.0
+{% else %}
+makestep 300 -1
+maxdistance 16.0
+{% endif %}
+{% else %}
+maxdistance 16.0
+{% endif %}
+
+pool pool.ntp.org iburst
+driftfile /var/lib/chrony/drift
+
+leapsectz right/UTC
+logdir /var/log/chrony
