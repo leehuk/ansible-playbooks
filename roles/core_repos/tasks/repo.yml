@@ -35,6 +35,14 @@
     dest: "/etc/yum.repos.d/{{ repo.file }}.repo"
   register: managed_repos_cur
 
+- name: debug top
+  debug:
+    var: managed_repos
+
+- name: debug cur
+  debug:
+    var: managed_repos_cur
+
 - name: Updating repo configuration
   set_fact:
     managed_repos: "{{ managed_repos|append(managed_repos_cur.path) }}"
