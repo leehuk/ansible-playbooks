@@ -1,3 +1,4 @@
+---
 - name: Checking local gpg key
   stat:
     path: "{{ role_path }}/files/gpg/{{ repo.gpgfile }}"
@@ -34,14 +35,6 @@
     src: repo.j2
     dest: "/etc/yum.repos.d/{{ repo.file }}.repo"
   register: managed_repos_cur
-
-- name: debug top
-  debug:
-    var: managed_repos
-
-- name: debug cur
-  debug:
-    var: managed_repos_cur
 
 - name: Updating repo configuration
   set_fact:
