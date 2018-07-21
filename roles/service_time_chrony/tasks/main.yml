@@ -11,3 +11,9 @@
     group: chrony
     mode: 0750
   notify: restart chronyd
+
+- name: Enable chronyd
+  service:
+    name: chronyd
+    enabled: yes
+    state: started
