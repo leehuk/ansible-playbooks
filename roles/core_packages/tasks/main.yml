@@ -1,0 +1,6 @@
+---
+- name: Install core packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ core_packages }}"

@@ -6,5 +6,6 @@
     - core_sudo
     - core_diskmgmt
     - core_repos
+    - core_packages
     - security_authorized_keys
     - security_sshd
