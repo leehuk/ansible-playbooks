@@ -25,3 +25,15 @@
   loop_control:
     loop_var: user
   when: user.dotfiles is defined and user.dotfiles
+
+- name: Creating gitconfig
+  copy:
+    content: "{{ user.gitconfig }}"
+    dest: "{{ user_accounts[user.name]['home'] }}/.gitconfig"
+    owner: "{{ user.name }}"
+    group: "{{ user_accounts[user.name]['group'] }}"
+    mode: 0600
+  loop: "{{ core_users }}"
+  loop_control:
+    loop_var: user
+  when: user.gitconfig is defined and user.gitconfig
