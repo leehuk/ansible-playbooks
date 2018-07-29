@@ -1,0 +1,39 @@
+- name: Install dnsmasq
+  package:
+    name: dnsmasq
+    state: present
+
+- name: Apply dnsmasq.conf
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    owner: root
+    group: dnsmasq
+    mode: 0640
+  notify: restart dnsmasq
+
+- name: Apply dnsmasq.d/servers.conf
+  template:
+    src: servers.conf.j2
+    dest: /etc/dnsmasq.d/servers.conf
+    owner: root
+    group: dnsmasq
+    mode: 0640
+  when: service_dnsmasq.forwarders is defined or service_dnsmasq.conditional_forwarders
+  notify: restart dnsmasq
+
+- name: Apply dnsmasq.d/local.conf
+  template:
+    src: local.conf.j2
+    dest: /etc/dnsmasq.d/local.conf
+    owner: root
+    group: dnsmasq
+    mode: 0640
+  when: service_dnsmasq.local is defined
+  notify: restart dnsmasq
+
+- name: Enable dnsmasq
+  service:
+    name: dnsmasq
+    state: started
+    enabled: yes

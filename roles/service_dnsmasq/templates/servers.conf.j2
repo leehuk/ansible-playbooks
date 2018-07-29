@@ -1,0 +1,15 @@
+{% for server in service_dnsmasq.forwarders|default([]) %}
+server={{ server }}
+{% endfor %}
+{% for entry in service_dnsmasq.conditional_forwarders|default([]) %}
+{% for domain in entry.domains|default([]) %}
+{% for server in entry.forwarders %}
+server=/{{ domain }}/{{ server }}
+{% endfor %}
+{% endfor %}
+{% for domain in entry.ptrs|default([]) %}
+{% for server in entry.forwarders %}
+rev-server={{ domain }},{{ server }}
+{% endfor %}
+{% endfor %}
+{% endfor %}

@@ -1,0 +1,21 @@
+{% if service_dnsmasq is not defined %}
+{% set service_dnsmasq = {} %}
+{% endif %}
+domain-needed
+
+# DNS servers are always sourced from dnsmasq.conf
+no-resolv
+no-poll
+no-hosts
+
+user=dnsmasq
+group=dnsmasq
+
+{% if service_dnsmasq.interface|default(false) %}
+interface = {{ service_dnsmasq.interface }}
+{% endif %}
+{% if service_dnsmasq.bind_interfaces|default(false) %}
+bind-interfaces
+{% endif %}
+
+conf-dir=/etc/dnsmasq.d,*.conf
