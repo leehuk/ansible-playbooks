@@ -1,0 +1,68 @@
+options {
+{% if service_bind.bind_v4_addresses|default([])|length > 0 %}
+    listen-on port 53 {
+{% for ipaddr in service_bind.bind_v4_addresses %}
+        {{ ipaddr }};
+{% endfor %}
+    };
+{% endif %}
+
+{% if service_bind.bind_v6_addresses|default([])|length > 0 %}
+    listen-on-v6 port 53 {
+{% for ipaddr in service_bind.bind_v6_addresses %}
+        {{ ipaddr }};
+{% endfor %}
+    };
+{% endif %}
+
+    directory               "/var/named";
+    dump-file               "/var/named/data/cache_dump.db";
+    statistics-file         "/var/named/data/named_stats.txt";
+    memstatistics-file      "/var/named/data/named_mem_stats.txt";
+    secroots-file           "/var/named/data/named.secroots";
+    recursing-file          "/var/named/data/named.recursing";
+    managed-keys-directory  "/var/named/dynamic";
+    pid-file                "/run/named/named.pid";
+    session-keyfile         "/run/named/session.key";
+
+    allow-query {
+        localhost;
+{% for ipaddr in service_bind.allow_addresses|default([]) %}
+        {{ ipaddr }};
+{% endfor %}
+    };
+
+{% if service_bind.recursion|default(false) %}
+    recursion           yes;
+{% endif %}
+
+{% if service_bind.forwarders|default([]) %}
+    forwarders {
+{% for ipaddr in service_bind.forwarders %}
+        {{ ipaddr }};
+{% endfor %}
+    };
+{% endif %}
+
+    dnssec-enable       yes;
+    dnssec-validation   yes;
+
+    include             "/etc/crypto-policies/back-ends/bind.config";
+};
+
+logging {
+    channel default_debug {
+        file        "data/named.run";
+        severity    dynamic;
+    };
+};
+
+include     "/etc/named.root.key";
+
+zone "." IN {
+    type    hint;
+    file    "named.ca";
+};
+
+include     "/etc/named.rfc1912.zones";
+include     "/etc/named.zones";

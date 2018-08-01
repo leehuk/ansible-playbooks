@@ -1,0 +1,15 @@
+{% if service_bind.forward_zones|default([]) %}
+{% for zone in service_bind.forward_zones %}
+{% for domain in zone.domains %}
+zone "{{ domain }}" IN {
+    type        forward;
+    forward     only;
+    forwarders {
+{% for ipaddr in zone.forwarders %}
+        {{ ipaddr }};
+{% endfor %}
+    };
+};
+{% endfor %}
+{% endfor %}
+{% endif %}

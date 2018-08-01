@@ -1,0 +1,26 @@
+- name: Install bind
+  package:
+    name: bind
+    state: present
+
+- name: Setup named.conf
+  template:
+    src: named.conf.j2
+    dest: /etc/named.conf
+    owner: root
+    group: named
+    mode: 0640
+
+- name: Setup named.zones
+  template:
+    src: named.zones.j2
+    dest: /etc/named.zones
+    owner: root
+    group: named
+    mode: 0640
+
+- name: Enable named
+  service:
+    name: named
+    state: started
+    enabled: yes
