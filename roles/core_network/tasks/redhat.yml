@@ -1,16 +1,13 @@
-- name: Disable NetworkManager
-  service:
-    name: NetworkManager
-    enabled: no
-    state: stopped
-  when: core_network.devices is defined
-
-- name: Disable NetworkManager-wait-online
-  service:
-    name: NetworkManager-wait-online
-    enabled: no
-    state: stopped
-  when: core_network.devices is defined
+- name: Enable ifcfg-rh plugin for NetworkManager
+  ini_file:
+    path: /etc/NetworkManager/NetworkManager.conf
+    mode: preserve
+    section: main
+    option: plugins
+    value: ifcfg-rh
+    create: no
+    no_extra_spaces: yes
+  notify: restart NetworkManager
 
 - name: Install device configuration
   template:
@@ -20,6 +17,7 @@
     - "{{ core_network.devices }}"
   register: network_devices
   when: core_network.devices is defined
+  notify: nmcli con reload
 
 - name: Install ipv4 route configuration
   template:
@@ -29,6 +27,7 @@
     - "{{ core_network.routes4 }}"
   register: network_routes4
   when: core_network.routes4 is defined
+  notify: nmcli con reload
 
 - name: Install ipv6 route configuration
   template:
@@ -38,6 +37,7 @@
     - "{{ core_network.routes6 }}"
   register: network_routes6
   when: core_network.routes6 is defined
+  notify: nmcli con reload
 
 - name: Install dns configuration
   template:

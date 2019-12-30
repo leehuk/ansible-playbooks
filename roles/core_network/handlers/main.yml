@@ -1,0 +1,5 @@
+- name: restart NetworkManager
+  service: name=NetworkManager state=restarted
+
+- name: nmcli con reload
+  shell: /usr/bin/nmcli con reload
